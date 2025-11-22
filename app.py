@@ -1,4 +1,4 @@
-# app.py - Main application entry point with Dark Mode support
+# app.py - Main application entry point with Dark Mode and Custom Favicon
 
 import dash
 from dash import html, dcc
@@ -20,6 +20,9 @@ try:
 except ImportError:
     print("WARNING: 'imbalanced-learn' is not installed. Run: pip install imbalanced-learn")
 
+# Brain emoji favicon as base64 SVG
+FAVICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>"
+
 
 def create_app():
     """Create and configure the Dash application."""
@@ -32,8 +35,12 @@ def create_app():
             "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         ],
         suppress_callback_exceptions=True,
-        title="NeuroPredict AI - Alzheimer's Risk Assessment"
+        title="NeuroPredict AI - Alzheimer's Risk Assessment",
+        update_title=None  # Prevents "Updating..." text in tab
     )
+
+    # Set custom favicon
+    app._favicon = FAVICON
 
     # Build layout
     app.layout = html.Div([
