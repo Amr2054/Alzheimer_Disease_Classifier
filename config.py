@@ -1,6 +1,6 @@
 # config.py - Feature definitions and configuration
 
-MODEL_FILE = 'alzheimers_model_data.pkl'
+MODEL_FILE = 'models&data/alzheimers_model_data.pkl'
 
 FEATURE_GROUPS = {
     "Patient Demographics": {
