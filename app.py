@@ -10,7 +10,7 @@ from components import (
     create_predict_button,
     create_footer,
     create_theme_toggle,
-    get_all_feature_cards
+    get_all_feature_cards, create_chat_component,
 )
 from callbacks import register_callbacks
 
@@ -28,31 +28,32 @@ def create_app():
     """Create and configure the Dash application."""
 
     # Initialize app with Bootstrap and Font Awesome
-    app = dash.Dash(
+    application = dash.Dash(
         __name__,
         external_stylesheets=[
             dbc.themes.BOOTSTRAP,
-            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            # "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"
+            "https://use.fontawesome.com/releases/v6.4.2/css/all.css"
         ],
         suppress_callback_exceptions=True,
-        title="NeuroPredict AI - Alzheimer's Risk Assessment",
+        title="Neuro ML - Alzheimer's Risk Assessment",
         update_title=None  # Prevents "Updating..." text in tab
     )
 
     # Set custom favicon
-    app._favicon = FAVICON
+    application._favicon = FAVICON
 
     # Build layout
-    app.layout = html.Div([
+    application.layout = html.Div([
         # URL component for theme initialization
         dcc.Location(id='url', refresh=False),
-
+        dcc.Store(id='result-store'),
         # Animated Background
         html.Div(className="bg-animated"),
 
         # Theme Toggle Button (Fixed Position)
         create_theme_toggle(),
-
+        create_chat_component(),
         # Main Container
         dbc.Container([
             # Header
@@ -85,9 +86,9 @@ def create_app():
     ], id="main-container")
 
     # Register callbacks
-    register_callbacks(app)
+    register_callbacks(application)
 
-    return app
+    return application
 
 
 # Create app instance

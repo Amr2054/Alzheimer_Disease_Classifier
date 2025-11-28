@@ -4,7 +4,6 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 from config import FEATURE_GROUPS
 
-
 def create_input_field(feature):
     """Create an input field based on feature type."""
     id_name = {'type': 'input-field', 'index': feature['name']}
@@ -79,7 +78,7 @@ def create_header():
                 html.I(className="fa-solid fa-brain", style={"fontSize": "2rem"})
             ], className="brain-logo"),
             html.Div([
-                html.H1("NeuroPredict AI", className="app-title"),
+                html.H1("Neuro ML", className="app-title"),
                 html.P("Advanced Alzheimer's Disease Risk Assessment", className="app-subtitle")
             ])
         ], className="logo-container", style={"flexDirection": "column"})
@@ -127,6 +126,16 @@ def create_footer():
 def create_result_card(result):
     """Create the result display card."""
     prob_percent = result['probability'] * 100
+    download_section = html.Div([
+        html.Hr(),
+        html.Button([
+            html.I(className="fa-solid fa-file-pdf me-2"),
+            "Download PDF Report"
+        ], id="btn-download-pdf", className="btn btn-outline-primary mt-2"),
+        dcc.Download(id="download-pdf-component")
+    ])
+
+
 
     if result['is_positive']:
         return html.Div([
@@ -143,7 +152,7 @@ def create_result_card(result):
                 html.Div(style={"width": f"{prob_percent}%"}, className="probability-fill")
             ], className="probability-bar"),
             html.Div([
-                html.Span("Risk Probability: ", style={"fontSize": "0.9rem"}),
+                html.Span("Risk Probability: ", style={"fontSize": "0.9rem","text-color":"white"}),
                 html.Span(f"{prob_percent:.1f}%", className="probability-text")
             ]),
             html.Div([
@@ -153,7 +162,9 @@ def create_result_card(result):
                 "marginTop": "1.5rem", "padding": "1rem",
                 "background": "rgba(239,68,68,0.1)", "borderRadius": "10px",
                 "fontSize": "0.9rem"
-            })
+            }),
+
+            download_section
         ], className="result-card result-positive")
     else:
         return html.Div([
@@ -180,7 +191,9 @@ def create_result_card(result):
                 "marginTop": "1.5rem", "padding": "1rem",
                 "background": "rgba(16,185,129,0.1)", "borderRadius": "10px",
                 "fontSize": "0.9rem"
-            })
+            }),
+
+            download_section
         ], className="result-card result-negative")
 
 
@@ -198,3 +211,221 @@ def get_all_feature_cards():
         create_feature_card(name, data, i)
         for i, (name, data) in enumerate(FEATURE_GROUPS.items())
     ]
+
+
+def create_chat_component():
+    return html.Div([
+        # 1. Floating Button (Wrapped in a Div we can hide/show)
+        html.Div(
+            dbc.Button(
+                html.I(className="fas fa-brain", style={"fontSize": "1.6rem"}),
+                id="open-chat",
+                color="primary",
+                className="rounded-circle d-flex align-items-center justify-content-center shadow-lg",
+                style={
+                    "width": "60px",
+                    "height": "60px",
+                    "boxShadow": "0 8px 24px rgba(99, 102, 241, 0.6)",
+                    "border": "3px solid white",
+                    "transition": "all 0.3s ease",
+                }
+            ),
+            id="chat-btn-wrapper",
+            style={
+                "position": "fixed",
+                "bottom": "30px",
+                "left": "30px",
+                "zIndex": "1050",
+                "display": "block",
+                "transition": "opacity 0.3s ease"
+            }
+        ),
+
+        # 2. Chat Interface (Offcanvas)
+        dbc.Offcanvas(
+            html.Div([
+                # Header with Close Button
+                html.Div([
+                    html.Div([
+                        html.I(className="fas fa-robot me-2",
+                               style={"fontSize": "1.5rem", "color": "var(--primary)"}),
+                        html.Span("NeuroBot", className="fw-bold fs-5")
+                    ], className="d-flex align-items-center"),
+                    dbc.Button(
+                        html.I(className="fas fa-times", style={"fontSize": "1.2rem"}),
+                        id="close-chat-btn",  # ID for callback
+                        color="light",
+                        size="sm",
+                        className="rounded-circle",
+                        style={
+                            "width": "35px",
+                            "height": "35px",
+                            "padding": "0",
+                            "border": "none",
+                            "display": "flex",
+                            "alignItems": "center",
+                            "justifyContent": "center"
+                        }
+                    )
+                ], style={
+                    "display": "flex",
+                    "justifyContent": "space-between",
+                    "alignItems": "center",
+                    "padding": "15px 20px",
+                    "borderBottom": "2px solid var(--border-color)",
+                    "background": "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)"
+                }),
+
+                # Content Area
+                html.Div([
+                    # Suggestions Section
+                    html.Div([
+                        html.Div([
+                            html.I(className="fas fa-sparkles me-2",
+                                   style={"color": "var(--primary)"}),
+                            html.Span("AI Medical Assistant", className="fw-bold")
+                        ], className="d-flex align-items-center mb-2"),
+                        html.P(
+                            "I can analyze the data you entered or define medical terms.",
+                            className="text-muted small mb-3",
+                            style={"lineHeight": "1.5"}
+                        ),
+                        html.Div([
+                            dbc.Badge(
+                                [html.I(className="fas fa-chart-line me-1"), "Analyze my data"],
+                                id="sugg-1",
+                                color="light",
+                                text_color="primary",
+                                className="me-2 mb-2 px-3 py-2 cursor-pointer",
+                                style={
+                                    "border": "1.5px solid var(--primary)",
+                                    "borderRadius": "20px",
+                                    "fontSize": "0.85rem",
+                                    "fontWeight": "500",
+                                    "transition": "all 0.2s ease"
+                                },
+                                n_clicks=0
+                            ),
+                            dbc.Badge(
+                                [html.I(className="fas fa-question-circle me-1"), "What is LDL?"],
+                                id="sugg-2",
+                                color="light",
+                                text_color="primary",
+                                className="me-2 mb-2 px-3 py-2 cursor-pointer",
+                                style={
+                                    "border": "1.5px solid var(--primary)",
+                                    "borderRadius": "20px",
+                                    "fontSize": "0.85rem",
+                                    "fontWeight": "500",
+                                    "transition": "all 0.2s ease"
+                                },
+                                n_clicks=0
+                            ),
+                            dbc.Badge(
+                                [html.I(className="fas fa-heartbeat me-1"), "Risks of hypertension?"],
+                                id="sugg-3",
+                                color="light",
+                                text_color="primary",
+                                className="me-2 mb-2 px-3 py-2 cursor-pointer",
+                                style={
+                                    "border": "1.5px solid var(--primary)",
+                                    "borderRadius": "20px",
+                                    "fontSize": "0.85rem",
+                                    "fontWeight": "500",
+                                    "transition": "all 0.2s ease"
+                                },
+                                n_clicks=0
+                            ),
+                        ], className="d-flex flex-wrap")
+                    ], style={
+                        "padding": "20px",
+                        "background": "linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%)",
+                        "borderRadius": "12px",
+                        "margin": "15px"
+                    }),
+
+                    # Chat History with Loading Spinner
+                    dcc.Loading(
+                        id="loading-chat",
+                        type="dot",
+                        color="var(--primary)",
+                        children=html.Div(
+                            id="chat-history",
+                            style={
+                                "flexGrow": 1,
+                                "overflowY": "auto",
+                                "padding": "15px",
+                                "display": "flex",
+                                "flexDirection": "column",
+                                "gap": "12px",
+                                "minHeight": "300px"
+                            }
+                        )
+                    ),
+                ], style={
+                    "flexGrow": 1,
+                    "overflowY": "auto",
+                    "display": "flex",
+                    "flexDirection": "column"
+                }),
+
+                # Input Area
+                html.Div([
+                    html.Div([
+                        dbc.Input(
+                            id="user-msg",
+                            placeholder="Type your health question...",
+                            type="text",
+                            n_submit=0,
+                            autoComplete="off",
+                            style={
+                                "borderRadius": "25px",
+                                "border": "2px solid var(--border-color)",
+                                "padding": "12px 20px",
+                                "fontSize": "0.95rem",
+                                "flex": "1"
+                            }
+                        ),
+                        dbc.Button(
+                            html.I(className="fas fa-arrow-up"),
+                            id="send-msg",
+                            color="primary",
+                            className="rounded-circle d-flex align-items-center justify-content-center chat-send-btn",
+                            style={
+                                "width": "45px",
+                                "height": "45px",
+                                "minWidth": "45px",
+                                "padding": "0",
+                                "border": "2px solid var(--primary)",
+                                "marginLeft": "10px",
+                                "flexShrink": "0"
+                            }
+                        )
+                    ], style={
+                        "display": "flex",
+                        "alignItems": "center",
+                        "gap": "10px"
+                    })
+                ], style={
+                    "padding": "15px 20px",
+                    "borderTop": "2px solid var(--border-color)",
+                    "background": "white"
+                })
+            ], style={
+                "height": "100%",
+                "display": "flex",
+                "flexDirection": "column",
+                "background": "#fafbfc"
+            }),
+            id="chat-canvas",
+            is_open=False,
+            backdrop=False,
+            close_button=False,  # Disable default close button since we have our own
+            style={
+                "width": "420px",
+                "borderRight": "1px solid var(--border-color)",
+                "boxShadow": "4px 0 20px rgba(0, 0, 0, 0.1)"
+            }
+        )
+    ])
+
