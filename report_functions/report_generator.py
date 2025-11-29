@@ -61,4 +61,4 @@ def generate_report(input_data, result):
         if pdf.get_x() > pdf.w - 30:
             pdf.ln()
 
-    return pdf.output(dest='S').encode('latin-1')
+    return bytes(pdf.output(dest='S'))
