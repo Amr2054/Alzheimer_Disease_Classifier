@@ -363,6 +363,9 @@ def register_callbacks(app):
     def predict_disease(n_clicks, values, ids):
         """Handle prediction when button is clicked."""
 
+        if not n_clicks:
+            return dash.no_update, dash.no_update
+
         if not model_handler.is_loaded():
             return create_error_alert(
                 "Model file not found. Please ensure 'alzheimers_model_data.pkl' is in the directory."
