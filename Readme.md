@@ -8,6 +8,10 @@
 **Neuro ML** is an advanced web application designed to assess the risk of Alzheimer's Disease using Machine Learning. It provides an intuitive interface for patients and healthcare professionals to input clinical data, receive immediate risk predictions, and interact with an integrated LLM-powered medical assistant.
 
 ---
+## 🌐 Check Live Website : [Neuro ML](https://alzheimer-disease-prediction-gp2t.onrender.com/)
+
+---
+
 
 ## ✨ Key Features
 
