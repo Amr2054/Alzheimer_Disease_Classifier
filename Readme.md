@@ -13,19 +13,19 @@
 ---
 
 
-## ✨ Key Features
+## Key Features
 
-### 1. 🤖 AI-Powered Risk Analysis
+### 1. AI-Powered Risk Analysis
 * Utilizes a trained **Random Forest Classifier** to predict the likelihood of Alzheimer's based on demographic, lifestyle, and clinical data.
 
-### 2. 📝 PDF Report Generation
+### 2. PDF Report Generation
 * Instantly generate and download a professional PDF summary of the assessment, including patient details and risk probability, suitable for medical record-keeping.
 
-### 3. 💬 NeuroBot Assistant (Gemini Powered)
+### 3. NeuroBot Assistant (Gemini Powered)
 * A floating, intelligent chatbot powered by **Google Gemini**.
 * Capable of explaining complex medical terms, offering health tips, and analyzing the specific data entered by the user in real-time.
 
-### 4. 🛡️ Robust UI/UX
+### 4. Robust UI/UX
 * **Dark/Light Mode:** Seamless theme toggling.
 * **Smart Validation:** Prevents submission of erroneous data (e.g., impossible blood pressure values).
 * **Responsive Design:** Works on desktop and mobile devices.
@@ -33,7 +33,7 @@
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Frontend:** [Dash](https://dash.plotly.com/), Dash Bootstrap Components (DBC), Custom CSS.
 * **Backend:** Python.
@@ -43,7 +43,7 @@
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 NeuroPredict-AI/
@@ -71,7 +71,7 @@ NeuroPredict-AI/
 
 -----
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1\. Clone the Repository
 
@@ -129,7 +129,7 @@ Open your browser and navigate to: `http://127.0.0.1:8050/`
 
 -----
 
-## 🖥️ Usage Guide
+## Usage Guide
 
 1.  **Input Data:** Fill in the demographic and clinical fields manually.
 2.  **Analyze:** Click **"Analyze Risk Profile"**.
@@ -141,7 +141,7 @@ Open your browser and navigate to: `http://127.0.0.1:8050/`
 
 -----
 
-## ⚠️ Medical Disclaimer
+## Medical Disclaimer
 
 **IMPORTANT:** This application is a prototype developed for educational and screening assistance purposes only.
 
@@ -151,6 +151,6 @@ Open your browser and navigate to: `http://127.0.0.1:8050/`
 
 -----
 
-## 📜 License
+## License
 
 This project is open-source and available under the [MIT License](https://opensource.org/licenses/MIT).
